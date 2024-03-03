@@ -14,7 +14,6 @@ const client = new Client({ intents: [
 client.cooldowns = new Collection();
 client.commands = new Collection();
 
-const LavalinkNodesOfEnv = node?.split(" ").filter(v => v.length).map(url => parseLavalinkConnUrl(url));
 
 
 client.lavalink = new LavalinkManager({
@@ -36,11 +35,11 @@ client.lavalink = new LavalinkManager({
     volumeDecrementer: 0.75,
 
     onDisconnect: {
-      autoReconnect: true,
-      destroyPlayer: false,
+      autoReconnect: false,
+      destroyPlayer: true,
     },
     onEmptyQueue: {
-      destroyAfterMs: 30_00,
+      destroyAfterMs: 200_00,
     }
   },
   queueOptions: {
@@ -55,6 +54,8 @@ client.lavalink.nodeManager.createNode({
   port: 2333,
   id: "testnode"
 });
+
+parseLavalinkConnUrl(node);
 
 client.on("raw", d => client.lavalink.sendRawData(d));
 
