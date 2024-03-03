@@ -9,7 +9,9 @@
   "author": "Rafael Castro",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.14.1"
+    "@discordjs/voice": "^0.16.1",
+    "discord.js": "^14.12.1",
+    "lavalink-client": "^2.1.4"
   },
   "devDependencies": {
     "eslint": "^8.57.0"

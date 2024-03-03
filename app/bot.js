@@ -1,13 +1,62 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const { token } = require('../config.json');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { token, clientId, lavalinkPassword, node } = require('../config.json');
+const { LavalinkManager, parseLavalinkConnUrl, LavalinkNode } = require("lavalink-client")
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [
+  GatewayIntentBits.Guilds, 
+  GatewayIntentBits.GuildVoiceStates,
+  GatewayIntentBits.GuildMembers,
+  GatewayIntentBits.GuildMessages] });
+  
 
 client.cooldowns = new Collection();
 client.commands = new Collection();
 
+const LavalinkNodesOfEnv = node?.split(" ").filter(v => v.length).map(url => parseLavalinkConnUrl(url));
+
+
+client.lavalink = new LavalinkManager({
+  nodes: [{
+    authorization: lavalinkPassword,
+    host: "localhost",
+    port: 2333,
+    id: "testnode"
+  }],
+  sendToShard: (guildId, payload) =>
+    client.guilds.cache.get(guildId)?.shard?.send(payload),
+  client: {
+    id: clientId, username: "Cappy Bot",
+  },
+  autoSkip: true,
+  playerOptions: {
+    clientBasedPositionUpdateInterval: 150,
+    defaultSearchPlatform: "ytsearch",
+    volumeDecrementer: 0.75,
+
+    onDisconnect: {
+      autoReconnect: true,
+      destroyPlayer: false,
+    },
+    onEmptyQueue: {
+      destroyAfterMs: 30_00,
+    }
+  },
+  queueOptions: {
+    maxPreviousTracks: 25
+  }
+
+});
+
+client.lavalink.nodeManager.createNode({
+  authorization: lavalinkPassword,
+  host: "localhost",
+  port: 2333,
+  id: "testnode"
+});
+
+client.on("raw", d => client.lavalink.sendRawData(d));
 
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
@@ -40,5 +89,4 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
-
 client.login(token);
