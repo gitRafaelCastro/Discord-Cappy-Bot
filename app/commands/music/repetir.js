@@ -25,7 +25,6 @@ module.exports = {
     if(!player) return interaction.reply({ ephemeral: true, content: ":no_entry: `>` Eu não estou conectado!" });
     if(!vcId) return interaction.reply({ ephemeral: true, content: ":no_entry: `>` Você não está em um canal de voz!"});
     if(player.voiceChannelId !== vcId) return interaction.reply({ ephemeral: true, content: ":no_entry: `>` Precisamos estar no mesmo canal de voz!" })
-    if(!player.queue.current) return interaction.reply({ ephemeral: true, content: ":no_entry: `>` Eu não estou reproduzindo nada!" });
     
     const selectedMode = (interaction.options).getString("modo")
     await player.setRepeatMode(selectedMode);

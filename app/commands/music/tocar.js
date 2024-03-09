@@ -92,7 +92,7 @@ module.exports = {
 
     await interaction.reply({
       content: response.loadType === "playlist" 
-        ? `:cd: \`>\` Adicionadas **[${response.tracks.length}]** faixas da playlist **${response.playlist?.title ? ` - from the ${response.pluginInfo.type || "Playlist"}** ${response.playlist.uri ? `[\`${response.playlist.title}\`](<${response.playlist.uri}>)` : `\`${response.playlist.title}\``}` : ""} à fila. \`${player.queue.tracks.length-response.tracks.length}º\`` 
+        ? `:cd: \`>\` Adicionadas **[${response.tracks.length}]** faixas da playlist **${response.playlist?.title ? `${response.pluginInfo.type || ""}** ${response.playlist.uri ? `[\`${response.playlist.title}\`](<${response.playlist.uri}>)` : `\`${response.playlist.title}\``}` : ""} à fila. \`${player.queue.tracks.length-response.tracks.length}º\`` 
         : `:cd: \`>\` Adicionada **[${response.tracks[0].info.title}](<${response.tracks[0].info.uri}>)** por ${response.tracks[0].info.author} na fila. \`${player.queue.tracks.length}º\`` 
     });
 
