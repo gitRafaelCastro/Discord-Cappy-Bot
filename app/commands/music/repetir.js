@@ -27,10 +27,17 @@ module.exports = {
     if(player.voiceChannelId !== vcId) return interaction.reply({ ephemeral: true, content: ":no_entry: `>` Precisamos estar no mesmo canal de voz!" })
     if(!player.queue.current) return interaction.reply({ ephemeral: true, content: ":no_entry: `>` Eu não estou reproduzindo nada!" });
     
-    await player.setRepeatMode((interaction.options).getString("modo"));
+    const selectedMode = (interaction.options).getString("modo")
+    await player.setRepeatMode(selectedMode);
+
+    const localizedResponses = {
+      off: "Desligado.",
+      track: "Apenas esta faixa.",
+      queue: "Todas as faixas."
+    }
 
     await interaction.reply({
-        ephemeral: true, content: `:repeat: `>` Modo de reprodução definido para: **${player.repeatMode}**`
+        ephemeral: true, content: ":repeat: `>` Modo de reprodução definido para: **"+ localizedResponses[selectedMode] +"**"
     });
   }
 }

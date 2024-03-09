@@ -36,7 +36,7 @@ module.exports = {
 
     const newPlayer = await client.lavalink.createPlayer({
       guildId: interaction.guildId, 
-      voiceChannelId: voiceId, 
+      voiceChannelId: VoiceId, 
       textChannelId: interaction.channelId, 
       selfDeaf: true, 
       selfMute: false,
@@ -51,7 +51,7 @@ module.exports = {
 
     if(!newPlayer.queue.current && !newPlayer.queue.tracks.length) return await interaction.reply({
       ephemeral: true,
-      content: ":warn: `>` Não há faixas para sincronizar!"
+      content: ":warning: `>` Não há faixas para sincronizar!"
     });
 
     await newPlayer.play();

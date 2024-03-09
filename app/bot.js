@@ -2,48 +2,59 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token, clientId, lavalinkPassword, node } = require('../config.json');
-const { LavalinkManager, parseLavalinkConnUrl, LavalinkNode } = require("lavalink-client")
+const { LavalinkManager, parseLavalinkConnUrl } = require("lavalink-client");
+const loadLavalinkEvents = require("./events/lavalink/loader");
+const { requesterTransformer, autoPlayFunction } = require("./Utils/OptimalFunctions")
 
 const client = new Client({ intents: [
   GatewayIntentBits.Guilds, 
   GatewayIntentBits.GuildVoiceStates,
   GatewayIntentBits.GuildMembers,
-  GatewayIntentBits.GuildMessages] });
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.MessageContent] });
   
 
 client.cooldowns = new Collection();
 client.commands = new Collection();
-
-
 
 client.lavalink = new LavalinkManager({
   nodes: [{
     authorization: lavalinkPassword,
     host: "localhost",
     port: 2333,
-    id: "testnode"
+    id: "default node"
   }],
+
   sendToShard: (guildId, payload) =>
     client.guilds.cache.get(guildId)?.shard?.send(payload),
   client: {
     id: clientId, username: "Cappy Bot",
   },
+
+
   autoSkip: true,
   playerOptions: {
     clientBasedPositionUpdateInterval: 150,
     defaultSearchPlatform: "ytsearch",
     volumeDecrementer: 0.75,
+    requesterTransformer: requesterTransformer,
 
     onDisconnect: {
-      autoReconnect: false,
-      destroyPlayer: true,
+      autoReconnect: true,
+      destroyPlayer: false,
     },
     onEmptyQueue: {
       destroyAfterMs: 200_00,
-    }
+      autoPlayFunction: autoPlayFunction
+      
+    },
+
+
+    useUnresolvedData: true,
   },
   queueOptions: {
-    maxPreviousTracks: 25
+    maxPreviousTracks: 25,
+    
   }
 
 });
@@ -52,7 +63,7 @@ client.lavalink.nodeManager.createNode({
   authorization: lavalinkPassword,
   host: "localhost",
   port: 2333,
-  id: "testnode"
+  id: "default node"
 });
 
 parseLavalinkConnUrl(node);
@@ -90,4 +101,6 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+loadLavalinkEvents.loadLavalinkEvents(client);
 client.login(token);
