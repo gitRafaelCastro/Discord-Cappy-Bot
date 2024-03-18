@@ -1,0 +1,112 @@
+const {SlashCommandBuilder} = require("discord.js");
+
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('tocar')
+		.setDescription('Adiciona uma faixa na fila de reprodução.')
+    .addStringOption(opt => opt
+      .setName('query')
+      .setDescription("O nome ou link da faixa a reproduzir.")
+      .setRequired(true))
+    .addStringOption(opt => opt
+      .setName('fonte')
+      .setDescription('Onde devo procurar a faixa.')
+      .setRequired(false)
+      .setChoices(
+        { name: "Youtube", value: "ytsearch" },
+        { name: "Youtube Music", value: "ytmsearch" },
+        { name: "Soundcloud", value: "scsearch" },
+        { name: "Deezer", value: "dzsearch" },
+        { name: "Spotify", value: "spsearch" },
+        { name: "Apple Music", value: "amsearch" },
+      )),
+	async execute(client, interaction) {
+		if (!interaction.guildId) return;
+
+    const guildId = interaction.guildId;
+
+    const voiceChannel = interaction.member?.voice?.channel
+    const voiceChannelId = (interaction.member)?.voice?.channelId;
+    let trackPlayer = client.Moonlink.players.get(guildId);
+    const textChannelId = interaction.channelId;
+
+    const query = interaction.options.getString("query");
+    const source = interaction.options.getString("fonte")||"ytsearch";
+
+    if (!voiceChannelId) return interaction.reply({
+      ephemeral: true,
+      content: ":no_entry: `>` Você precisa estar em um canal de voz!",
+    })
+
+    if (!trackPlayer) {
+      trackPlayer = client.Moonlink.players.create({
+        guildId: guildId,
+        voiceChannel: voiceChannelId,
+        textChannel: textChannelId,
+      })  
+    }
+
+    if (voiceChannelId !== trackPlayer.voiceChannel) return interaction.reply({
+      ephemeral: true,
+      content: ":no_entry: `>` Eu já estou em outro canal de voz!",
+    })
+
+    if (!voiceChannel.joinable) return interaction.reply({
+      ephemeral: true,
+      content: ":no_entry: `>` Eu não tenho permissão para entrar nesse canal!",
+    })
+    
+    if (!trackPlayer.connected) {
+      trackPlayer.connect({
+        setDeaf: true,
+        setMute: false,
+      })
+    }
+
+    const searchResponse = await client.Moonlink.search({
+      query,
+      source: source,
+      requester: interaction.user.id
+    });
+
+    switch (searchResponse.loadType) {
+      case "error":
+        return interaction.reply({
+          ephemeral: true,
+          content: ":x: `>` Ocorreu um erro ao buscar a faixa!",
+        })
+
+      case "empty":
+        return interaction.reply({
+          ephemeral: true,
+          content: ":x: `>` Infelizmente não encontrei a faixa.",
+        })
+
+      case "playlist":
+        
+        for (const track in searchResponse.tracks) {
+          trackPlayer.queue.add(track);
+        }
+
+        interaction.reply({
+          ephemeral: false,
+          content: ":cd: `>` " + searchResponse.tracks.length + " faixas da playlist " + searchResponse.playlistInfo.name + " foram adicionadas na fila.",
+        })
+        break;
+    
+      default:
+        trackPlayer.queue.add(searchResponse.tracks[0]);
+
+        interaction.reply({
+          ephemeral: false,
+          content: ":cd: `>` Faixa " + searchResponse.tracks[0].title + " adicionada ao final da fila."
+        })
+
+        break;
+    }
+
+    if (!trackPlayer.playing) {
+      trackPlayer.play();
+    }
+	},
+};

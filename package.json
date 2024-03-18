@@ -1,0 +1,21 @@
+{
+  "name": "bot-rework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./app/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/voice": "^0.16.1",
+    "chalk": "^4.1.2",
+    "dayjs": "^1.11.10",
+    "discord.js": "^14.14.1",
+    "libsodium-wrappers": "^0.7.13",
+    "moonlink.js": "github:Ecliptia/moonlink.js#development",
+    "ms": "^2.1.3"
+  }
+}
