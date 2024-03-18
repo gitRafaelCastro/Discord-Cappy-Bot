@@ -28,6 +28,7 @@ BotClientObj.Moonlink = new MoonlinkManager(
     switchPlayersAnotherNode: false,
     previousTracksInArray: true,
     resume: true,
+    
   },
 
   (id, data) => {
