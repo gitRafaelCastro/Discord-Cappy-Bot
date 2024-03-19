@@ -1,4 +1,6 @@
 const {SlashCommandBuilder} = require("discord.js");
+const { consoleMoonlinkLog } = require("../../utils/logFormatter");
+const { trackAddedEmbed } = require("../../utils/embedBuilder");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -43,6 +45,7 @@ module.exports = {
         guildId: guildId,
         voiceChannel: voiceChannelId,
         textChannel: textChannelId,
+        autoLeave: true
       })  
     }
 
@@ -88,25 +91,27 @@ module.exports = {
           trackPlayer.queue.add(track);
         }
 
-        interaction.reply({
+        await interaction.reply({
           ephemeral: false,
+          fetchReply: true,
           content: ":cd: `>` " + searchResponse.tracks.length + " faixas da playlist " + searchResponse.playlistInfo.name + " foram adicionadas na fila.",
         })
+
         break;
     
       default:
         trackPlayer.queue.add(searchResponse.tracks[0]);
 
-        interaction.reply({
-          ephemeral: false,
-          content: ":cd: `>` Faixa " + searchResponse.tracks[0].title + " adicionada ao final da fila."
+        await interaction.reply({
+          embeds: [trackAddedEmbed(client, trackPlayer, searchResponse.tracks[0])]
         })
-
         break;
     }
 
     if (!trackPlayer.playing) {
       trackPlayer.play();
     }
+
+    
 	},
 };

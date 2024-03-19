@@ -1,13 +1,13 @@
-const { consoleMoonlinkError } = require("../../utils/logFormatter")
+const { consoleNodelinkError } = require("../../utils/logFormatter")
 
 
 module.exports = {
   name: "nodeError",
   execute(client, node, error) {
     try {
-      consoleMoonlinkError(`Node ${node.identifier} sofreu um erro: ${error}.`);
+      consoleNodelinkError(`Node ${node.identifier} sofreu um erro: ${error}.`);
     } catch (error) {
-      consoleMoonlinkError(error)
+      consoleNodelinkError(error)
     }
   }
 }

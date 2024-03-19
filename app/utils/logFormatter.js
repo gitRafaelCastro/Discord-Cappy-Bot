@@ -50,6 +50,39 @@ const consoleTrackPlayerError = (message) => {
   console.log(coloredLog.redBright(`[TrackPlayer Erro] -> `) + coloredLog.white(message));
 }
 
+const consoleNodelinkLog = (message) => {
+  console.log(coloredLog.hex("#f94d84")(`[Nodelink Log] -> `) + coloredLog.white(`${message}`));
+}
+
+const consoleNodelinkSuccess = (message) => {
+  console.log(coloredLog.greenBright(`[Nodelink Sucesso] -> `) + coloredLog.white(`${message}`));
+}
+
+const consoleNodelinkError = (message) => {
+  console.error(coloredLog.redBright(`[Nodelink Erro] -> `) + coloredLog.white(`${message}`));
+}
+
+const consoleNodelinkWarn = (message) => {
+  console.warn(coloredLog.yellow(`[Nodelink Aviso] -> `) + coloredLog.white(`${message}`));
+}
+
+const consoleWebSocketLog = (message) => {
+  console.log(coloredLog.hex("#f9614d")(`[WebSocket Log] -> `) + coloredLog.white(`${message}`));
+}
+
+const consoleWebSocketSuccess = (message) => {
+  console.log(coloredLog.greenBright(`[WebSocket Sucesso] -> `) + coloredLog.white(`${message}`));
+}
+
+const consoleWebSocketError = (message) => {
+  console.error(coloredLog.redBright(`[WebSocket Erro] -> `) + coloredLog.white(`${message}`));
+}
+
+const consoleWebSocketWarn = (message) => {
+  console.warn(coloredLog.yellow(`[WebSocket Aviso] -> `) + coloredLog.white(`${message}`));
+}
+
+
 
 
 // Exportar as funções
@@ -65,7 +98,15 @@ module.exports = {
   consoleMoonlinkWarn,
   consoleCommandUse,
   consoleTrackPlayer,
-  consoleTrackPlayerError
+  consoleTrackPlayerError,
+  consoleNodelinkLog,
+  consoleNodelinkError,
+  consoleNodelinkSuccess,
+  consoleNodelinkWarn,
+  consoleWebSocketLog,
+  consoleWebSocketError,
+  consoleWebSocketSuccess,
+  consoleWebSocketWarn,
 };
 
 

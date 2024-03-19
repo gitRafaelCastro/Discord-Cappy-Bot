@@ -22,6 +22,11 @@ module.exports = {
       content: ":no_entry: `>` Você precisa estar no mesmo canal de voz que eu!",
     })
 
+    if (!trackPlayer.playing) return interaction.reply({
+      ephemeral: true,
+      content: ":no_entry: `>` Não estou tocando nada!",
+    })
+
     if (trackPlayer.paused) {
       trackPlayer.resume()
       return interaction.reply({
