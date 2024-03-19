@@ -22,7 +22,7 @@ const startTrackEmbed = function (client, player, current) {
       name: "▶️ Tocando agora:"
     })
     .setFooter({
-      text: `Adicionado por ${requester ? requester.username : "?"}`, iconURL: requester.avatarURL()
+      text: `Adicionado por ${requester ? requester.username : "?"}`, iconURL: `${requester ? requester.avatarURL() : client.user.avatarURL()}`
     })
 }
 
@@ -42,7 +42,7 @@ const trackAddedEmbed = function (client, player, current) {
       name: "💿 Adicionado à fila:"
     })
     .setFooter({
-      text: `Adicionado por ${requester ? requester.username : "Auto-Player"}`, iconURL: requester.avatarURL()
+      text: `Adicionado por ${requester ? requester.username : "Auto-Player"}`, iconURL: `${requester ? requester.avatarURL() : client.user.avatarURL()}`
     })
 }
 
@@ -69,7 +69,7 @@ const currentTrackEmbed = function (client, player, current) {
       name: "▶️ Tocando agora:"
     })
     .setFooter({
-      text: `Adicionado por ${requester ? requester.username : "Auto-Player"}`, iconURL: requester.avatarURL()
+      text: `Adicionado por ${requester ? requester.username : "Auto-Player"}`, iconURL: `${requester ? requester.avatarURL() : client.user.avatarURL()}`
     })
 }
 
