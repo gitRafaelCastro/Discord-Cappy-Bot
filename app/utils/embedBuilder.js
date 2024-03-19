@@ -22,7 +22,7 @@ const startTrackEmbed = function (client, player, current) {
       name: "▶️ Tocando agora:"
     })
     .setFooter({
-      text: `Adicionado por ${requester.username || "?"}`, iconURL: requester.avatarURL()
+      text: `Adicionado por ${requester ? requester.username : "?"}`, iconURL: requester.avatarURL()
     })
 }
 
