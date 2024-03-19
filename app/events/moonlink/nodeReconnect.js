@@ -1,13 +1,13 @@
-const { consoleMoonlinkError, consoleMoonlinkSuccess } = require("../../utils/logFormatter")
+const { consoleNodelinkError, consoleNodelinkSuccess } = require("../../utils/logFormatter")
 
 
 module.exports = {
   name: "nodeReconnect",
   execute(client, node) {
     try {
-      consoleMoonlinkSuccess(`Node ${node.identifier} reconectado.`)
+      consoleNodelinkSuccess(`Node ${node.identifier} reconectado.`)
     } catch (error) {
-      consoleMoonlinkError(error)
+      consoleNodelinkError(error)
     }
   }
 }

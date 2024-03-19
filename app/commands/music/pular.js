@@ -37,7 +37,7 @@ module.exports = {
     trackPlayer.skip(skipAmount);
 
     return interaction.reply({
-      ephemeral: true,
+      ephemeral: false,
       content: ":track_next: `>` Faixa pulada!",
     })
 	},

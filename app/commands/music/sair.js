@@ -15,8 +15,12 @@ module.exports = {
     if (!trackPlayer || !trackPlayer.connected) {
       const connection = getVoiceConnection(interaction.guildId);
       try {
-        connection.disconnect();
-        consoleLog("Desconectado via voiceConnection")
+
+        if (connection) {
+          connection.disconnect();
+          consoleLog("Desconectado via voiceConnection")
+        }
+        
       } catch (error) {
         consoleError(error)
       }
@@ -31,7 +35,8 @@ module.exports = {
       content: ":no_entry: `>` Você precisa estar no mesmo canal de voz que eu!",
     })
 
-    trackPlayer.destroy();
+    trackPlayer.stop(true);
+    trackPlayer.disconnect();
 
     return interaction.reply({
       ephemeral: false,

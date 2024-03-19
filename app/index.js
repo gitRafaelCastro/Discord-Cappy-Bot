@@ -24,10 +24,10 @@ BotClientObj.Moonlink = new MoonlinkManager(
     clientId: applicationId,
     clientName: clientName,
     destroyPlayersStopped: false,
-    autoResume: true,
+    autoResume: false,
     switchPlayersAnotherNode: false,
     previousTracksInArray: true,
-    resume: true,
+    resume: false,
     
   },
 
@@ -36,7 +36,6 @@ BotClientObj.Moonlink = new MoonlinkManager(
     if (guild) guild.shard.send(JSON.parse(data));
   },
 );
-
 
 loadCommandHandler(BotClientObj);
 loadEventHandler(BotClientObj);
