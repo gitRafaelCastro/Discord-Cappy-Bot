@@ -11,7 +11,7 @@ const consoleDebug = (message) => {
 };
 
 const consoleError = (message) => {
-  console.error(coloredLog.redBright(`[Erro] -> `) + coloredLog.white(`${message}`));
+  console.error(coloredLog.redBright(`[Erro] -> `) + coloredLog.white(`${message} em ${message.fileName} : ${message.lineNumber}; ${message.columnNumber}`));
 }
 
 const consoleWarn = (message) => {
@@ -31,7 +31,7 @@ const consoleMoonlinkSuccess = (message) => {
 }
 
 const consoleMoonlinkError = (message) => {
-  console.error(coloredLog.redBright(`[Moonlink Erro] -> `) + coloredLog.white(`${message}`));
+  console.error(coloredLog.redBright(`[Moonlink Erro] -> `) + coloredLog.white(`${message} em ${message.fileName} : ${message.lineNumber}; ${message.columnNumber}`));
 }
 
 const consoleMoonlinkWarn = (message) => {
@@ -47,7 +47,7 @@ const consoleTrackPlayer = (message) => {
 }
 
 const consoleTrackPlayerError = (message) => {
-  console.log(coloredLog.redBright(`[TrackPlayer Erro] -> `) + coloredLog.white(message));
+  console.log(coloredLog.redBright(`[TrackPlayer Erro] -> `) + coloredLog.white(message) + ` em ${message.fileName} : ${message.lineNumber}; ${errmessageor.columnNumber}` );
 }
 
 const consoleNodelinkLog = (message) => {
@@ -59,7 +59,7 @@ const consoleNodelinkSuccess = (message) => {
 }
 
 const consoleNodelinkError = (message) => {
-  console.error(coloredLog.redBright(`[Nodelink Erro] -> `) + coloredLog.white(`${message}`));
+  console.error(coloredLog.redBright(`[Nodelink Erro] -> `) + coloredLog.white(`${message} em ${message.fileName} : ${message.lineNumber}; ${message.columnNumber}`));
 }
 
 const consoleNodelinkWarn = (message) => {
@@ -75,7 +75,7 @@ const consoleWebSocketSuccess = (message) => {
 }
 
 const consoleWebSocketError = (message) => {
-  console.error(coloredLog.redBright(`[WebSocket Erro] -> `) + coloredLog.white(`${message}`));
+  console.error(coloredLog.redBright(`[WebSocket Erro] -> `) + coloredLog.white(`${message} em ${message.fileName} : ${message.lineNumber}; ${message.columnNumber}`));
 }
 
 const consoleWebSocketWarn = (message) => {

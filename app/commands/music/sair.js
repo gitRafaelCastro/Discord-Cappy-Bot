@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { getVoiceConnection } = require("@discordjs/voice");
-const { consoleLog, consoleError } = require("../../utils/logFormatter");
+const { consoleLog, consoleError, consoleDebug } = require("../../utils/logFormatter");
+const { trackAddedEmbed } = require("../../utils/embedBuilder");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,34 +11,28 @@ module.exports = {
     if (!interaction.guildId) return;
 
     const voiceChannelId = (interaction.member)?.voice?.channelId;
-    let trackPlayer = client.Moonlink.players.get(interaction.guildId);
+    
 
-    if (!trackPlayer || !trackPlayer.connected) {
-      const connection = getVoiceConnection(interaction.guildId);
-      try {
-
-        if (connection) {
-          connection.disconnect();
-          consoleLog("Desconectado via voiceConnection")
-        }
-        
-      } catch (error) {
-        consoleError(error)
-      }
+    if (!client.Moonlink.players.has(interaction.guildId)) {
 
       return interaction.reply({
       ephemeral: true,
       content: ":no_entry: `>` Eu não estou conectado!",
     })}
 
+    const trackPlayer = client.Moonlink.players.get(interaction.guildId);
+
     if (voiceChannelId !== trackPlayer.voiceChannel) return interaction.reply({
       ephemeral: true,
       content: ":no_entry: `>` Você precisa estar no mesmo canal de voz que eu!",
     })
+    
 
-    trackPlayer.stop(true);
-    trackPlayer.disconnect();
+    const stopCall = await trackPlayer.stop()
 
+    if (stopCall) trackPlayer.destroy()
+
+    
     return interaction.reply({
       ephemeral: false,
       content: ":stop_button: `>` Desconectado!",

@@ -11,17 +11,14 @@ module.exports = {
 
     const guildId = interaction.guildId;
 
-    const trackPlayer = client.Moonlink.players.get(guildId);
+    
 
-    if (!trackPlayer) return interaction.reply({
+    if (!client.Moonlink.players.get(guildId) || !client.Moonlink.players.get(guildId).playing ) return interaction.reply({
       ephemeral: true,
       content: ":no_entry: `>` Não estou conectado!",
     })
 
-    if (!trackPlayer.playing) return interaction.reply({
-      ephemeral: true,
-      content: ":no_entry: `>` Não estou tocando nada!",
-    })
+    const trackPlayer = client.Moonlink.players.get(guildId);
 
     if (trackPlayer.get("playingEmbed")) {
       const oldReply = trackPlayer.get("playingEmbed");

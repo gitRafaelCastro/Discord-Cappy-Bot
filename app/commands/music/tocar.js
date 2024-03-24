@@ -29,7 +29,6 @@ module.exports = {
 
     const voiceChannel = interaction.member?.voice?.channel
     const voiceChannelId = (interaction.member)?.voice?.channelId;
-    let trackPlayer = client.Moonlink.players.get(guildId);
     const textChannelId = interaction.channelId;
 
     const query = interaction.options.getString("query");
@@ -40,16 +39,14 @@ module.exports = {
       content: ":no_entry: `>` Você precisa estar em um canal de voz!",
     })
 
-    if (!trackPlayer) {
-      trackPlayer = client.Moonlink.players.create({
-        guildId: guildId,
-        voiceChannel: voiceChannelId,
-        textChannel: textChannelId,
-        autoLeave: true
-      })  
-    }
+    const trackPlayer = client.Moonlink.players.get(guildId) || client.Moonlink.players.create({
+      guildId: guildId,
+      voiceChannel: voiceChannelId,
+      textChannel: textChannelId,
+      autoLeave: false
+    })  
 
-    if (voiceChannelId !== trackPlayer.voiceChannel) return interaction.reply({
+    if (voiceChannelId !== trackPlayer.voiceChannel && trackPlayer.playing && trackPlayer.connected) return interaction.reply({
       ephemeral: true,
       content: ":no_entry: `>` Eu já estou em outro canal de voz!",
     })
@@ -59,12 +56,7 @@ module.exports = {
       content: ":no_entry: `>` Eu não tenho permissão para entrar nesse canal!",
     })
     
-    if (!trackPlayer.connected) {
-      trackPlayer.connect({
-        setDeaf: true,
-        setMute: false,
-      })
-    }
+
 
     const searchResponse = await client.Moonlink.search({
       query,
@@ -88,6 +80,7 @@ module.exports = {
       case "playlist":
         
         for (const track in searchResponse.tracks) {
+          track.requester = interaction.user.id;
           trackPlayer.queue.add(track);
         }
 
@@ -106,6 +99,13 @@ module.exports = {
           embeds: [trackAddedEmbed(client, trackPlayer, searchResponse.tracks[0])]
         })
         break;
+    }
+
+    if (!trackPlayer.connected) {
+      trackPlayer.connect({
+        selfDeaf: true,
+        selfMute: false,
+      })
     }
 
     if (!trackPlayer.playing) {
